@@ -25,7 +25,7 @@ def check_database_existence():
         if e.errno == 1049:  #1049 is the MySQL error code for "Unknown database"
             create()
         else:
-            print(f"Error: {e}")
+            print("Error: {e}")
 check_database_existence()
 
 
@@ -755,7 +755,7 @@ def search():
                     messagebox.showinfo("No Results", "No records found for the given movie name.")
 
             except Exception as e:
-                print(f"Error: {e}")
+                print("Error: {e}")
 
         #Function to ask confirmation from user for quiting
         def on_closingname():
@@ -834,7 +834,7 @@ def search():
                 else:
                     messagebox.showinfo("No Results", "No records found for the given IMDB ID.")
             except Exception as e:
-                print(f"Error: {e}")
+                print("Error: {e}")
 
         #Function to ask confirmation from user for quiting
         def on_closingid():
