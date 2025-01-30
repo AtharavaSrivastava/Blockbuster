@@ -1,7 +1,5 @@
 #Importing required libraries
 import tkinter as tk
-from tkinter import StringVar
-from tkinter import messagebox
 import mysql.connector as sq
 
  
