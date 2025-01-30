@@ -105,6 +105,7 @@ def recreate_root():
             lab2.place(x=170,y=300)
             ch.set('')
 
+    #Binding Return to key accept final inputs.
     en1.bind ('<Return>',choicefunc)
     
     #Recreating the option window
@@ -196,8 +197,8 @@ def insert():
         code.set('')
         dr.set('')
         rt.set('')
-        
-    insertk.bind_all('<Return>', insertin)
+
+
         
     #Function to ask confirmation from user for quiting
     def on_closing():
@@ -206,7 +207,9 @@ def insert():
             recreate_root() #Re-opening root window
         else:
             pass
-        
+    #Binding Return to key accept final inputs.
+    insertk.bind_all('<Return>', insertin)  
+     
     insertk.protocol('WM_DELETE_WINDOW',on_closing)
     insertk.mainloop()
 
@@ -358,6 +361,8 @@ def update(event=None):
                 recreate_root() # Re-opening root window
             else:
                 pass 
+        
+        #Binding Return to key accept final inputs.
         nametk.bind_all('<Return>', finallyupdating)
         nametk.protocol('WM_DELETE_WINDOW',on_closingname)
 
@@ -459,14 +464,18 @@ def update(event=None):
                 recreate_root() #Re-opening root window
             else:
                 pass
+        
+        #Binding Return to key accept final inputs.
         idtk.bind_all('<Return>', finallyupdating)
         idtk.protocol('WM_DELETE_WINDOW',on_closingid)
+
         
+    #Binding Return to key accept final inputs.
     updatetk.bind_all('<Return>', updateit)
-    updateit()    
+ 
     updatetk.protocol('WM_DELETE_WINDOW',on_closing)
     updatetk.mainloop()
-
+    updateit()
 #Function for deleting a record 
 def delete():
 
@@ -570,7 +579,9 @@ def delete():
                 nametk.destroy() #Closing this window
                 recreate_root() #Re-opening root window
             else:
-                pass 
+                pass
+        
+        #Binding Return to key accept final inputs.
         nametk.bind_all('<Return>', finallydeleting)
         nametk.protocol('WM_DELETE_WINDOW',on_closingname)
 
@@ -628,14 +639,16 @@ def delete():
                 idtk.destroy() #Closing this window
                 recreate_root() #Re-opening root window
             else:
-                pass 
+                pass
+
+        #Binding Return to key accept final inputs. 
         idtk.bind_all('<Return>', finallydeleting)
         idtk.protocol('WM_DELETE_WINDOW',on_closingid)
-        
+
+    #Binding Return to key accept final inputs.    
     deletetk.bind_all('<Return>',deleteit)
-    deleteit()      
     deletetk.mainloop()
-    
+    deleteit()
 
 #Function for searching a record
 def search():
@@ -764,7 +777,9 @@ def search():
                 nametk.destroy() #Closing this window
                 recreate_root() #Re-opening root window
             else:
-                pass 
+                pass
+        
+        #Binding Return to key accept final inputs.
         nametk.bind_all('<Return>', finallysearching)
         nametk.protocol('WM_DELETE_WINDOW', on_closingname)
 
@@ -843,10 +858,13 @@ def search():
                 idtk.destroy() #Closing this window
                 recreate_root() #Re-opening root window
             else:
-                pass 
+                pass
+
+        #Binding Return to key accept final inputs. 
         idtk.bind_all('<Return>', finallysearching)
         idtk.protocol('WM_DELETE_WINDOW', on_closingid)
 
+    #Binding Return to key accept final inputs.
     searchtk.bind_all('<Return>',searchit)
 
 #Function for displaying the data
@@ -942,8 +960,17 @@ en1.place(x=420,y=263)
 def on_closing():
         if messagebox.askyesno(title='QUIT?',message='Are you sure you want to quit'):
             root.destroy() #Closing root window
+            exit_=tk.Tk()
+            exit_.geometry('500x100')
+            exit_.config(bg='#42c8f5')
+            exit_.title('Exit')
+            label_0=tk.Label(exit_, text="Thank You!",font=('Cascadia Mono SemiLight',16,'bold'),bg='#42c8f5')
+            label_1=tk.Label(exit_, text="Hope you have a nice day!",font=('Cascadia Mono SemiLight',16,'bold'),bg='#42c8f5')
+            label_0.pack()
+            label_1.pack()
         else:
             pass
+root.protocol('WM_DELETE_WINDOW',on_closing)
 
 #Function to accept the choice user from menu items
 def choicefunc(event=None):
@@ -965,6 +992,7 @@ def choicefunc(event=None):
         display()
     #To exit the program
     elif choice=='6':
+        #Creating exit window
         exit_=tk.Tk()
         exit_.geometry('500x100')
         exit_.config(bg='#42c8f5')
@@ -979,5 +1007,6 @@ def choicefunc(event=None):
         lab2=tk.Label(root,text="Please Enter Valid Input!",font=('Cascadia Mono SemiLight',15),bg='#42c8f5')
         lab2.place(x=170,y=300)
         ch.set('')
-        
+
+#Binding Return to key accept final inputs.
 en1.bind('<Return>',choicefunc)
