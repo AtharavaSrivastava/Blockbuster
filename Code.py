@@ -995,3 +995,4 @@ def choicefunc(event=None):
 
 #Binding Return to key accept final inputs.
 en1.bind('<Return>',choicefunc)
+
