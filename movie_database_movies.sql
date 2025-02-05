@@ -28,7 +28,8 @@ CREATE TABLE `movies` (
   `date_of_release` date DEFAULT NULL,
   `IMDB_id` int DEFAULT NULL,
   `Director` varchar(500) DEFAULT NULL,
-  `Rating` varchar(500) DEFAULT NULL
+  `Rating` varchar(500) DEFAULT NULL,
+  `Watched_it` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -38,7 +39,7 @@ CREATE TABLE `movies` (
 
 LOCK TABLES `movies` WRITE;
 /*!40000 ALTER TABLE `movies` DISABLE KEYS */;
-INSERT INTO `movies` VALUES ('Dil Bechara','Romance, Drama','2020-07-24',1,'Mukesh Chhabra','6.6'),('Munjya','Horror, Comedy','2024-06-07',2,'Aditya Sarpotdar','6.4'),('3 Idiots','Comedy, Drama','2009-12-25',3,'Rajkumar Hirani','8.4'),('Chhichhore','Comedy, Drama','2019-09-06',4,'Nitesh Tiwari','8.0'),('Forrest Gump','Drama, Romance','1994-07-06',5,'Robert Zemeckis','8.8'),('Tumse Na Ho Payega','Comedy','2023-09-29',6,'Abhishek Sinha','6.2'),('Friday Night Plan','Comedy, Drama','2023-09-01',7,'Vatsal Neelakantan','5.7'),('12th Fail','Drama','2023-10-27',8,'Vidhu Vinod Chopra','7.9');
+INSERT INTO `movies` VALUES ('Dil Bechara','Romance, Drama','2020-07-24',1,'Mukesh Chhabra','6.6','No'),('Munjya','Horror, Comedy','2024-06-07',2,'Aditya Sarpotdar','6.4','No'),('3 Idiots','Comedy, Drama','2009-12-25',3,'Rajkumar Hirani','8.4','Yes'),('Chhichhore','Comedy, Drama','2019-09-06',4,'Nitesh Tiwari','8.0','Yes'),('Forrest Gump','Drama, Romance','1994-07-06',5,'Robert Zemeckis','8.8','Yes'),('Tumse Na Ho Payega','Comedy','2023-09-29',6,'Abhishek Sinha','6.2','Yes'),('Friday Night Plan','Comedy, Drama','2023-09-01',7,'Vatsal Neelakantan','5.7','No'),('12th Fail','Drama','2023-10-27',8,'Vidhu Vinod Chopra','7.9','Yes');
 /*!40000 ALTER TABLE `movies` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-04  0:43:25
+-- Dump completed on 2025-02-05 23:02:37

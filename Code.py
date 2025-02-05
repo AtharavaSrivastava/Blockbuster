@@ -5,22 +5,21 @@ from tkinter import messagebox
 import mysql.connector as sq
 
  
-#Creating the database Movie_database and a table inside it called Movies
+#Creating the database movie_database and a table inside it called Movies
 def create():
     mydb = sq.connect(host="localhost",user="root",password="root")
     mycursor = mydb.cursor()
-    sql = "Create database Movie_database"
+    sql = "Create database movie_database"
     mycursor.execute(sql)
-    mycursor.execute("Use Movie_database")
+    mycursor.execute("Use movie_database")
     mydb.commit()
-    mycursor.execute("Create table Movies (Movie_Name VARCHAR(500), Genre VARCHAR(100), date_of_release DATE, IMDB_id INTEGER,Director VARCHAR(500), Rating VARCHAR(500))")
+    mycursor.execute("Create table Movies (Movie_Name VARCHAR(500), Genre VARCHAR(100), date_of_release DATE, IMDB_id INTEGER,Director VARCHAR(500), Rating VARCHAR(500), Watched_it VARCHAR(5))")
     mydb.commit()
-
 
 #Checking the existence of the database and creating it if the database does not exist
 def check_database_existence():
     try:
-        mydb = sq.connect(host="localhost",user="root",password="root",database="Movie_database")
+        mydb = sq.connect(host="localhost",user="root",password="root",database="movie_database")
     except sq.Error as e:
         if e.errno == 1049:  #1049 is the MySQL error code for "Unknown database"
             create()
@@ -119,7 +118,7 @@ def insert():
     
     #Creating window to insert data
     insertk=tk.Tk()  
-    insertk.geometry('850x380')
+    insertk.geometry('850x400')
     insertk.configure(bg='#42c8f5')
     insertk.title('Insert Record')
     
@@ -131,6 +130,7 @@ def insert():
     lab4=tk.Label(insertk,text="IMDB ID:",bg='#42c8f5',font=('Cascadia Mono SemiLight',14))
     lab5=tk.Label(insertk,text="Movie Director:",bg='#42c8f5',font=('Cascadia Mono SemiLight',14))
     lab6=tk.Label(insertk,text="IMDB Rating:",bg='#42c8f5',font=('Cascadia Mono SemiLight',14))
+    lab7=tk.Label(insertk,text="Have you watched it yet?:",bg='#42c8f5',font=('Cascadia Mono SemiLight',14))
     
     #Placing labels
     lab0.pack()
@@ -140,6 +140,7 @@ def insert():
     lab4.place(x=10,y=180)
     lab5.place(x=10,y=220)
     lab6.place(x=10,y=260)
+    lab7.place(x=10,y=300)
 
     #Initializing variables to read the entry box data
     nm=StringVar()
@@ -148,15 +149,17 @@ def insert():
     code=StringVar()
     dr=StringVar()
     rt=StringVar()
+    seen=StringVar()
 
     #Creating entry boxes
+    en0=tk.Entry(insertk)
     en1=tk.Entry(insertk,textvariable=nm,font=('Cascadia Mono SemiLight',14))
     en2=tk.Entry(insertk,textvariable=genre,font=('Cascadia Mono SemiLight',14))
     en3=tk.Entry(insertk,textvariable=dor,font=('Cascadia Mono SemiLight',14))
     en4=tk.Entry(insertk,textvariable=code,font=('Cascadia Mono SemiLight',14))
     en5=tk.Entry(insertk,textvariable=dr,font=('Cascadia Mono SemiLight',14))
     en6=tk.Entry(insertk,textvariable=rt,font=('Cascadia Mono SemiLight',14))
-    en7=tk.Entry(insertk)
+    en7=tk.Entry(insertk,textvariable=seen,font=('Cascadia Mono SemiLight',14))
     
     #Placing entry boxes
     en1.place(x=225,y=62)
@@ -165,6 +168,7 @@ def insert():
     en4.place(x=105,y=182)
     en5.place(x=180,y=222)      
     en6.place(x=145,y=262)
+    en7.place(x=290,y=302)
     
     #Function to execute query for entering data in MySQL table
     def insertin(event=None):
@@ -176,18 +180,20 @@ def insert():
         Movie_code=code.get()
         Director=dr.get()
         Rating=rt.get()
-
+        Seen=seen.get()
         #Connecting to MySQL and executing the query
         mydb = sq.connect(host="localhost",user="root",password="root",database="movie_database")
         mycursor = mydb.cursor()
-        sql = "INSERT INTO Movies (Movie_Name, Genre, Date_of_release, IMDB_id, Director, Rating) VALUES (%s,%s,%s,%s,%s,%s)"
-        val = (Name,Genre,DOR,Movie_code,Director,Rating)
+        sql = "INSERT INTO Movies (Movie_Name, Genre, Date_of_release, IMDB_id, Director, Rating, Watched_it) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        val = (Name,Genre,DOR,Movie_code,Director,Rating,Seen)
+        '''sql = "INSERT INTO Movies (Movie_Name, Genre, Date_of_release, IMDB_id, Director, Rating, Watched_it) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        val = (Name,Genre,DOR,Movie_code,Director,Rating,Seen)'''
         mycursor.execute(sql, val)
         mydb.commit()
         
         #Displaying message for successful insert
         added=tk.Label(insertk,text='Record Inserted',font=('Cascadia Mono SemiLight',20),bg='#42c8f5')
-        added.place(x=300,y=295)
+        added.place(x=300,y=340)
 
         #Setting all entry boxes to blank so that new data can be entered
         nm.set('')
@@ -196,6 +202,7 @@ def insert():
         code.set('')
         dr.set('')
         rt.set('')
+        seen.set('')
         
     insertk.bind_all('<Return>', insertin)
         
@@ -335,9 +342,9 @@ def update(event=None):
                 field='Rating'
 
             #Connecting to MySQL and executing the query
-            mydb= sq.connect(host="localhost",user="root",passwd="root",database="Movie_database")
+            mydb= sq.connect(host="localhost",user="root",passwd="root",database="movie_database")
             cursor=mydb.cursor()
-            update="UPDATE Movies set {} = '{}' WHERE Movie_Name like '{}'".format(field,fieldch,up)
+            update="UPDATE Movies set {} = '{}' WHERE Movie_Name = '{}'".format(field,fieldch,up)
             cursor.execute(update)
             mydb.commit()
 
@@ -436,7 +443,7 @@ def update(event=None):
                 field='Rating'
 
             #Connecting to MySQL and executing the query
-            mydb= sq.connect(host="localhost",user="root",passwd="root",database="Movie_database")
+            mydb= sq.connect(host="localhost",user="root",passwd="root",database="movie_database")
             cursor=mydb.cursor()
             update="UPDATE Movies set {} = '{}' WHERE IMDB_ID= '{}'".format(field,fieldch,up)
             cursor.execute(update)
@@ -552,7 +559,7 @@ def delete():
             #Connecting to MySQL and executing the query
             c=sq.connect(host="localhost",user="root",passwd="root",database="movie_database")
             cursor=c.cursor()
-            sql="DELETE FROM Movies WHERE Movie_Name like '%{}%'".format(dele)
+            sql="DELETE FROM Movies WHERE Movie_Name='{}'".format(dele)
             cursor.execute(sql)
             c.commit()
 
@@ -610,7 +617,7 @@ def delete():
             #Connecting to MySQL and executing the query
             c=sq.connect(host="localhost",user="root",passwd="root",database="movie_database")
             cursor=c.cursor()
-            sql="DELETE FROM Movies WHERE IMDB_id like '%{}%'".format(dele)
+            sql="DELETE FROM Movies WHERE IMDB_id = '{}'".format(dele)
             cursor.execute(sql)
             c.commit()
 
@@ -718,42 +725,38 @@ def search():
         def finallysearching(event=None):
             try:
                 #Getting information from entry box
-                name = search.get()
+                idd = search.get()
 
                 #Connecting to MySQL and executing the query
                 mydb = sq.connect(host='localhost', user='root', password='root', database='movie_database')
                 cursor = mydb.cursor()
-                cursor.execute("SELECT * FROM Movies WHERE Movie_Name LIKE '%{}%'".format(name))
+                cursor.execute("SELECT * FROM Movies WHERE Movie_name = '{}'".format(idd))
 
                 #Reading the output provied by MySQL
                 result = cursor.fetchall()
-
                 #Displaying output according to the result obtained from the query
                 #If record exists
                 if result:
                     
                     #New window to display data
                     display_window = tk.Tk()
-                    display_window.geometry('600x100')
+                    display_window.geometry('1040x110')
                     display_window.configure(bg='#42c8f5')
                     display_window.title('Search Results for Movie Name')
 
                     #Creating header labels for the table
-                    header_labels = ['Movie Name', 'IMDB ID', 'Director', 'Year', 'Genre']
+                    header_labels = ['Movie Name', 'Genre','Date of Release', 'IMDB ID', 'Director', 'Rating','Watched it?']
                     for i, header in enumerate(header_labels):
                         tk.Label(display_window, text=header, font=('Cascadia Mono SemiLight', 16), bg='#42c8f5').grid(row=0, column=i, padx=10, pady=10)
 
                     #Adding movie records in rows
                     for i, record in enumerate(result):
-                        for j, value in enumerate(record[1:]):
+                        for j, value in enumerate(record):  
                             tk.Label(display_window, text=value, font=('Cascadia Mono SemiLight', 14), bg='#42c8f5').grid(row=i + 1, column=j, padx=10, pady=5)
 
                     display_window.mainloop()
-
-                #If record does not exist
                 else:
-                    messagebox.showinfo("No Results", "No records found for the given movie name.")
-
+                    messagebox.showinfo("No Results", "No records found for the given IMDB ID.")
             except Exception as e:
                 print("Error: {e}")
 
@@ -805,29 +808,28 @@ def search():
                 #Connecting to MySQL and executing the query
                 mydb = sq.connect(host='localhost', user='root', password='root', database='movie_database')
                 cursor = mydb.cursor()
-                cursor.execute("SELECT * FROM Movies WHERE IMDB_id LIKE '%{}%'".format(idd))
+                cursor.execute("SELECT * FROM Movies WHERE IMDB_id = '{}'".format(idd))
 
                 #Reading the output provied by MySQL
                 result = cursor.fetchall()
-
                 #Displaying output according to the result obtained from the query
                 #If record exists
                 if result:
                     
                     #New window to display data
                     display_window = tk.Tk()
-                    display_window.geometry('600x100')
+                    display_window.geometry('1040x110')
                     display_window.configure(bg='#42c8f5')
-                    display_window.title('Search Results for Movie Name')
+                    display_window.title('Search Results for  IMDB ID')
 
                     #Creating header labels for the table
-                    header_labels = ['Movie Name', 'IMDB ID', 'Director', 'Year', 'Genre']
+                    header_labels = ['Movie Name', 'Genre','Date of Release', 'IMDB ID', 'Director', 'Rating','Watched it?']
                     for i, header in enumerate(header_labels):
                         tk.Label(display_window, text=header, font=('Cascadia Mono SemiLight', 16), bg='#42c8f5').grid(row=0, column=i, padx=10, pady=10)
 
                     #Adding movie records in rows
                     for i, record in enumerate(result):
-                        for j, value in enumerate(record[1:]):  
+                        for j, value in enumerate(record):  
                             tk.Label(display_window, text=value, font=('Cascadia Mono SemiLight', 14), bg='#42c8f5').grid(row=i + 1, column=j, padx=10, pady=5)
 
                     display_window.mainloop()
@@ -858,7 +860,7 @@ def display():
     #Creating window to search a record    
     displaytk=tk.Tk()
     displaytk.configure(bg='#42c8f5')
-    displaytk.geometry('1000x550')
+    displaytk.geometry('1210x400')
     displaytk.title('Display Record')
 
     #Connecting to MySQL and executing the query
@@ -883,7 +885,7 @@ def display():
     canvas.configure(yscrollcommand=scrollbar.set)
 
     #Adding the header labels
-    header_labels = ['Movie Name', 'Genre', 'Date of Release', 'IMDB Id', 'Director', 'Rating']
+    header_labels = ['Movie Name', 'Genre', 'Date of Release', 'IMDB Id', 'Director', 'Rating','Watched it?']
     for i, header in enumerate(header_labels):
         tk.Label(scrollable_frame, text=header, font=('Cascadia Mono SemiLight', 16), bg='#42c8f5').grid(row=0, column=i, padx=10, pady=10)
 
@@ -995,4 +997,3 @@ def choicefunc(event=None):
 
 #Binding Return to key accept final inputs.
 en1.bind('<Return>',choicefunc)
-
